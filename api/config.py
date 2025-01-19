@@ -9,10 +9,12 @@ class ProdConfig(Config):
     SQLALCHEMY_DATABASE_URI = os.getenv('DATABASE_URI')
 
 class DevConfig(Config):
-    SQlALCHEMY_DATABASE_URI = 'mysql://root:root@localhost:3306/sakila'
+    SQLALCHEMY_DATABASE_URI = 'mysql://root:rootroot@localhost:3306/sakila'
 
 match os.getenv('ENV'):
     case 'PRODUCTION':
         config = ProdConfig
     case _:
         config = DevConfig
+
+

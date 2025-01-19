@@ -6,7 +6,7 @@ from api.models.actor import Actor
 from api.schemas.actor import actor_schema, actors_schema
 
 # Create a "Blueprint", or model
-# We can inster this into our flask app
+# We can insert this into our flask app
 actors_router = Blueprint('actors', __name__, url_prefix='/actors')
 
 
@@ -37,7 +37,5 @@ def create_actor():
     db.session.add(actor)               # Insert the record
     db.session.commit()                 # Update the database
 
-    return actors_schema.dump(actor)    # Serialize the created actor
-
-
+    return actor_schema.dump(actor)    # Serialize the created actor
 
