@@ -56,3 +56,15 @@ def update_film(film_id):
     db.session.commit()
 
     return film_schema.dump(film)
+
+# Delete a film record
+@films_router.delete('/<film_id>')
+def delete_film(film_id):
+    film = Film.query.get(film_id)
+
+    if film is None:
+        return jsonify({'message': 'Film not found'}), 404
+
+    db.session.delete(film)
+    db.session.commit()
+    return jsonify({'message': 'Film deleted successfully'}), 200
