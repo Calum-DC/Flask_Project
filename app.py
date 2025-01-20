@@ -7,6 +7,8 @@ def create_app():
     app = Flask(__name__)
     app.config.from_object(config)
 
+    app.config['DEBUG'] = True
+    app.config['ENV'] = 'development'
 
     from api.models import db
     db.init_app(app)
