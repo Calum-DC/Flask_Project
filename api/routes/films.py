@@ -37,3 +37,22 @@ def create_film():
     db.session.commit()                 # Update the database
 
     return film_schema.dump(film)    # Serialize the created actor
+
+# Update a film file
+@films_router.put('/<film_id>')
+def update_film(film_id):
+    film = Film.query.get(film_id)
+    film_data = request.json
+
+    if film is None:
+        return jsonify({'message': 'Film not found'}), 404.
+    try:
+        film_schema.load(film_data)
+    except ValidationError as err:
+        return jsonify(err.messages), 400
+
+    for key, value in film_data.items():
+        setattr(film, key, value)
+    db.session.commit()
+
+    return film_schema.dump(film)
