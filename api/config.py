@@ -2,7 +2,7 @@ import os
 
 class Config(object):
     TESTING = False
-    SQlALCHEMY_TRACK_MODIFICATIONS = False
+    SQLALCHEMY_TRACK_MODIFICATIONS = False
 
 
 class ProdConfig(Config):

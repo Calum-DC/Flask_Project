@@ -39,3 +39,23 @@ def create_actor():
 
     return actor_schema.dump(actor)    # Serialize the created actor
 
+# Update an actors record
+@actors_router.put('/<actor_id>')
+def update_actor(actor_id):
+    actor = Actor.query.get(actor_id)
+    actor_data = request.json
+
+    if actor is None:
+        return jsonify({'message': 'Actor not found'}), 404. # TODO: add errors like this to all potential outcomes
+
+    try:
+        actor_schema.load(actor_data)
+    except ValidationError as err:
+        return jsonify(err.messages), 400
+
+    for key, value in actor_data.items():
+        setattr(actor, key, value)
+    db.session.commit()
+
+    return actor_schema.dump(actor)
+
