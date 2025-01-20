@@ -59,3 +59,16 @@ def update_actor(actor_id):
 
     return actor_schema.dump(actor)
 
+# Delete an actors record
+
+@actors_router.delete('/<actor_id>')
+def delete_actor(actor_id):
+    actor = Actor.query.get(actor_id)
+
+    if actor is None:
+        return jsonify({'message': 'Actor not found'}), 404
+
+    db.session.delete(actor)
+    db.session.commit()
+    return jsonify({'message': 'Actor deleted successfully'}), 200
+
