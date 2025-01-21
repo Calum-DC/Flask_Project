@@ -4,38 +4,41 @@ from marshmallow import ValidationError
 from api.models import db, Film
 from api.schemas.film import film_schema, films_schema
 
-# Create a "Blueprint", r model
-# We can insert this into our flask app
-films_router = Blueprint('films', __name__, url_prefix='/films')
+# Create a "Blueprint"
+films_router = Blueprint('films_router', __name__, url_prefix='/films')
 
-# RESTful endpoints - Read
-# GET requests to the collection return a list of all the actors in the database
+# GET requests to the collection return a list of all the films in the database
 @films_router.get('/')
 def read_all_films():
-    actors = Film.query.all()
-    return films_schema.dump(actors)
+    page = request.args.get('page', 1, type=int)
+    per_page = 30
+    pagination = Film.query.paginate(page=page, per_page=per_page)
+    films = pagination.items
+    return render_template('films.html', films=films, pagination=pagination)
 
 # GET request to a specific document in the collection return a single film
 @films_router.get('/<film_id>')
 def read_film (film_id):
     film = Film.query.get(film_id)
-    return film_schema.dump(film)
+    return render_template('film.html', film=film)
 
-# RESTful endpoints - Create
+
+
+# Create new film and relevant details
 @films_router.post('/')
 def create_film():
-    film_data = request.json           # Get the parsed request body
+    film_data = request.json
 
     try:
-        film_schema.load(film_data)   # Validate against the schema
+        film_schema.load(film_data)
     except ValidationError as err:
         return jsonify(err.messages), 400
 
-    film = Film(**film_data)         # Create new actor model
-    db.session.add(film)               # Insert the record
-    db.session.commit()                 # Update the database
+    film = Film(**film_data)
+    db.session.add(film)
+    db.session.commit()
 
-    return film_schema.dump(film)    # Serialize the created actor
+    return film_schema.dump(film)
 
 # Update a film file
 @films_router.put('/<film_id>')

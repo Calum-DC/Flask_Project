@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Home</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+</head>
+<style>
+</style>
+<body>
+    <h1>Flask CRUD API Project</h1>
+    <div>
+        <a href="/api/actors">Get All Actors</a>
+        <a href="/api/films">Get All Films</a>
+    </div>
+
+    <form action="/api/actors/<actor_id>" method="get">
+        <label for="actor_id">Search Actor by ID:</label>
+        <input type="text" id="actor_id" name="actor_id" required>
+        <button type="submit">Search Actor</button>
+    </form>
+
+    <form action="/api/films/film_id" method="get">
+        <label for="film_id">Search Film by ID:</label>
+        <input type="text" id="film_id" name="film_id" required>
+        <button type="submit">Search Film</button>
+    </form>
+</body>
+</html>

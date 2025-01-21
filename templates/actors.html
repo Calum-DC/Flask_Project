@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Actors</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+</head>
+<body>
+    <div>
+        <h1>All Actors</h1>
+        <table>
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>First Name</th>
+                    <th>Last Name</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for actor in actors %}
+                <tr>
+                    <td>{{ actor.actor_id }}</td>
+                    <td>{{ actor.first_name }}</td>
+                    <td>{{ actor.last_name }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        <!--        Paigation controlls-->
+           <nav aria-label="Page navigation">
+        <ul>
+            {% if pagination.has_prev %}
+                <li><a href="{{ url_for('api.actors_router.read_all_actors', page=pagination.prev_num) }}">Previous</a></li>
+            {% endif %}
+
+            <li>Page {{ pagination.page }} of {{ pagination.pages }}</li>
+
+            {% if pagination.has_next %}
+                <li><a href="{{ url_for('api.actors_router.read_all_actors', page=pagination.next_num) }}">Next</a></li>
+            {% endif %}
+        </ul>
+    </nav>
+        <a href="/">Back to Home</a>
+    </div>
+</body>
+</html>
