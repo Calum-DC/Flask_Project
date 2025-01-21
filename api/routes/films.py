@@ -86,6 +86,10 @@ def get_actors_by_film(film_id):
         for actor in actors
     ]
 
-    # Return the film title at the top
-    return { "actors": actors_data, "title": film.title,}
+    # # Return the film title at the top
+    # return { "actors": actors_data, "title": film.title,}
 
+    return render_template("actors_in_film.html", title=film.title, id=film.film_id, actors=actors_data)
+
+
+# add film to actor

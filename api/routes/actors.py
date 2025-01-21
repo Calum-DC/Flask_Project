@@ -1,7 +1,7 @@
 from flask import Blueprint, request, jsonify, render_template
 from marshmallow import ValidationError
 
-from api.models import db, Actor
+from api.models import db, Actor, Film
 from api.schemas.actor import actor_schema, actors_schema
 
 # Create a "Blueprint", or model
@@ -71,6 +71,8 @@ def delete_actor(actor_id):
     db.session.commit()
     return jsonify({'message': 'Actor deleted successfully'}), 200
 
+
+
 # find all the films by a specified actor
 @actors_router.get('/<actor_id>/films')
 def get_films_by_actor(actor_id):
@@ -83,7 +85,12 @@ def get_films_by_actor(actor_id):
     # Serialize the results
     films_data = [film.title for film in films]
 
-    return {"actor_id": actor.actor_id, "films": films_data}
+    return render_template("films_by_actors.html", actor_id=actor.actor_id, first_name=actor.first_name, last_name=actor.last_name,films=films_data)
+
+
+    # return {"actor_id": actor.actor_id, "films": films_data}
+
+
 
 
 
