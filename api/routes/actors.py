@@ -1,14 +1,12 @@
-from flask import Blueprint, request, jsonify
+from flask import Blueprint, request, jsonify, render_template
 from marshmallow import ValidationError
 
-from api.models import db
-from api.models.actor import Actor
+from api.models import db, Actor
 from api.schemas.actor import actor_schema, actors_schema
 
 # Create a "Blueprint", or model
 # We can insert this into our flask app
 actors_router = Blueprint('actors', __name__, url_prefix='/actors')
-
 
 # RESTful endpoints - Read
 # GET requests to the collection return a list of all the actors in the database
@@ -20,7 +18,7 @@ def read_all_actors():
 # GET request to a specific documet in the collection return a single actor
 @actors_router.get('/<actor_id>')
 def read_actor(actor_id):
-    actor = Actor.query.get(actor_id)
+    actor = Actor.query.get_or_404(actor_id)
     return actor_schema.dump(actor)
 
 # RESTful endpoints - Create
@@ -70,4 +68,24 @@ def delete_actor(actor_id):
     db.session.delete(actor)
     db.session.commit()
     return jsonify({'message': 'Actor deleted successfully'}), 200
+
+
+@actors_router.get('/<actor_id>/films')
+def get_films_by_actor(actor_id):
+    # Fetch the actor by ID
+    actor = Actor.query.get(actor_id)
+
+    # Access related films using the `films` relationship
+    films = actor.films
+
+    # Serialize the results
+    films_data = [film.title for film in films]
+
+    return {"actor_id": actor.actor_id, "films": films_data}
+
+
+
+
+
+
 

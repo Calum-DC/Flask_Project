@@ -1,8 +1,7 @@
-from flask import Blueprint, request, jsonify
+from flask import Blueprint, request, jsonify, render_template
 from marshmallow import ValidationError
 
-from api.models import db
-from api.models.film import Film
+from api.models import db, Film
 from api.schemas.film import film_schema, films_schema
 
 # Create a "Blueprint", r model
@@ -68,3 +67,22 @@ def delete_film(film_id):
     db.session.delete(film)
     db.session.commit()
     return jsonify({'message': 'Film deleted successfully'}), 200
+
+# find all the actors in a specified film
+@films_router.get('/<film_id>/actors')
+def get_actors_by_film(film_id):
+    # Fetch the actor by ID
+    film = Film.query.get(film_id)
+
+    # Access related films using the `films` relationship
+    actors = film.actors
+
+    # Serialize the results
+    actors_data = [
+        {"actor_id": actor.actor_id, "first_name": actor.first_name, "last_name": actor.last_name}
+        for actor in actors
+    ]
+
+    # Return the film title at the top
+    return { "actors": actors_data, "title": film.title,}
+
